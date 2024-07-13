@@ -1,4 +1,4 @@
-module gozagel.com/commons
+module github.com/kata-kas/commons
 
 go 1.22.1
 
@@ -27,9 +27,11 @@ require (
 )
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/hashicorp/consul/api v1.29.1
+	golang.org/x/crypto v0.25.0
 	golang.org/x/net v0.25.0 // indirect
-	golang.org/x/sys v0.20.0 // indirect
-	golang.org/x/text v0.15.0 // indirect
+	golang.org/x/sys v0.22.0 // indirect
+	golang.org/x/text v0.16.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240528184218-531527333157 // indirect
 )
