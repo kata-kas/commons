@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option go_package = "github.com/gozagel/commons/api";
+
+package api;
+
+message User {
+    string email = 1;
+    string password = 2;
+}
+
+message AuthResponse {
+    string token = 1;
+}
+
+service AuthService {
+    rpc Login(User) returns (AuthResponse);
+    rpc Register(User) returns (AuthResponse);
+}
+
+message QuoteRequest {
+    string from_country = 1;
+    string from_city = 2;
+    string to_country = 3;
+    string to_city = 4;
+    double length = 5;
+    double width = 6;
+    double height = 7;
+    double weight = 8;
+}
+
+message QuoteResponse {
+    double price = 1;
+}
+
+service QuoteRequestService {
+    rpc RequestQuote(QuoteRequest) returns (QuoteResponse);
+}
