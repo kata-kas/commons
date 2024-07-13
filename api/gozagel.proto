@@ -27,6 +27,7 @@ message QuoteRequest {
     double width = 6;
     double height = 7;
     double weight = 8;
+    bool residential = 13;
 }
 
 message Quote {
