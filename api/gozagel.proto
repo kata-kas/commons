@@ -29,8 +29,17 @@ message QuoteRequest {
     double weight = 8;
 }
 
+message Quote {
+    string id = 1;
+    string carrier = 2;
+    string carrier_id = 3;
+    string currency = 4;
+    float rate = 5;
+    int32 delay = 6;
+}
+
 message QuoteResponse {
-    double price = 1;
+    repeated Quote quotes = 1;
 }
 
 service QuoteRequestService {
