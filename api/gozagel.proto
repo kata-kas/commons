@@ -4,6 +4,16 @@ option go_package = "github.com/gozagel/commons/api";
 
 package api;
 
+service AuthService {
+    rpc Login(User) returns (AuthResponse);
+    rpc Register(User) returns (AuthResponse);
+}
+
+service QuoteRequestsService {
+    rpc RequestQuotes(QuoteRequestsBody) returns (QuoteRequestsResponse);
+    rpc GetQuotes(QuoteRequestsResponse) returns (QuotesResponse);
+}
+
 message User {
     string email = 1;
     string password = 2;
@@ -13,12 +23,7 @@ message AuthResponse {
     string token = 1;
 }
 
-service AuthService {
-    rpc Login(User) returns (AuthResponse);
-    rpc Register(User) returns (AuthResponse);
-}
-
-message QuoteRequest {
+message QuoteRequestsBody {
     string from_country = 1;
     string from_city = 2;
     string to_country = 3;
@@ -39,10 +44,10 @@ message Quote {
     int32 delay = 6;
 }
 
-message QuoteResponse {
-    repeated Quote quotes = 1;
+message QuoteRequestsResponse {
+    string quoterequestsid = 1;
 }
 
-service QuoteRequestService {
-    rpc RequestQuote(QuoteRequest) returns (QuoteResponse);
+message QuotesResponse {
+    repeated Quote quotes = 1;
 }
