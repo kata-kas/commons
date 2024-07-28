@@ -148,128 +148,128 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	QuoteRequestsService_RequestQuotes_FullMethodName = "/api.QuoteRequestsService/RequestQuotes"
-	QuoteRequestsService_GetQuotes_FullMethodName     = "/api.QuoteRequestsService/GetQuotes"
+	OrdersService_RequestQuotes_FullMethodName = "/api.OrdersService/RequestQuotes"
+	OrdersService_GetQuotes_FullMethodName     = "/api.OrdersService/GetQuotes"
 )
 
-// QuoteRequestsServiceClient is the client API for QuoteRequestsService service.
+// OrdersServiceClient is the client API for OrdersService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type QuoteRequestsServiceClient interface {
+type OrdersServiceClient interface {
 	RequestQuotes(ctx context.Context, in *QuoteRequestsBody, opts ...grpc.CallOption) (*QuoteRequestsResponse, error)
 	GetQuotes(ctx context.Context, in *QuoteRequestsResponse, opts ...grpc.CallOption) (*QuotesResponse, error)
 }
 
-type quoteRequestsServiceClient struct {
+type ordersServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewQuoteRequestsServiceClient(cc grpc.ClientConnInterface) QuoteRequestsServiceClient {
-	return &quoteRequestsServiceClient{cc}
+func NewOrdersServiceClient(cc grpc.ClientConnInterface) OrdersServiceClient {
+	return &ordersServiceClient{cc}
 }
 
-func (c *quoteRequestsServiceClient) RequestQuotes(ctx context.Context, in *QuoteRequestsBody, opts ...grpc.CallOption) (*QuoteRequestsResponse, error) {
+func (c *ordersServiceClient) RequestQuotes(ctx context.Context, in *QuoteRequestsBody, opts ...grpc.CallOption) (*QuoteRequestsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QuoteRequestsResponse)
-	err := c.cc.Invoke(ctx, QuoteRequestsService_RequestQuotes_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, OrdersService_RequestQuotes_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *quoteRequestsServiceClient) GetQuotes(ctx context.Context, in *QuoteRequestsResponse, opts ...grpc.CallOption) (*QuotesResponse, error) {
+func (c *ordersServiceClient) GetQuotes(ctx context.Context, in *QuoteRequestsResponse, opts ...grpc.CallOption) (*QuotesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QuotesResponse)
-	err := c.cc.Invoke(ctx, QuoteRequestsService_GetQuotes_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, OrdersService_GetQuotes_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// QuoteRequestsServiceServer is the server API for QuoteRequestsService service.
-// All implementations must embed UnimplementedQuoteRequestsServiceServer
+// OrdersServiceServer is the server API for OrdersService service.
+// All implementations must embed UnimplementedOrdersServiceServer
 // for forward compatibility
-type QuoteRequestsServiceServer interface {
+type OrdersServiceServer interface {
 	RequestQuotes(context.Context, *QuoteRequestsBody) (*QuoteRequestsResponse, error)
 	GetQuotes(context.Context, *QuoteRequestsResponse) (*QuotesResponse, error)
-	mustEmbedUnimplementedQuoteRequestsServiceServer()
+	mustEmbedUnimplementedOrdersServiceServer()
 }
 
-// UnimplementedQuoteRequestsServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedQuoteRequestsServiceServer struct {
+// UnimplementedOrdersServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedOrdersServiceServer struct {
 }
 
-func (UnimplementedQuoteRequestsServiceServer) RequestQuotes(context.Context, *QuoteRequestsBody) (*QuoteRequestsResponse, error) {
+func (UnimplementedOrdersServiceServer) RequestQuotes(context.Context, *QuoteRequestsBody) (*QuoteRequestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequestQuotes not implemented")
 }
-func (UnimplementedQuoteRequestsServiceServer) GetQuotes(context.Context, *QuoteRequestsResponse) (*QuotesResponse, error) {
+func (UnimplementedOrdersServiceServer) GetQuotes(context.Context, *QuoteRequestsResponse) (*QuotesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetQuotes not implemented")
 }
-func (UnimplementedQuoteRequestsServiceServer) mustEmbedUnimplementedQuoteRequestsServiceServer() {}
+func (UnimplementedOrdersServiceServer) mustEmbedUnimplementedOrdersServiceServer() {}
 
-// UnsafeQuoteRequestsServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to QuoteRequestsServiceServer will
+// UnsafeOrdersServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to OrdersServiceServer will
 // result in compilation errors.
-type UnsafeQuoteRequestsServiceServer interface {
-	mustEmbedUnimplementedQuoteRequestsServiceServer()
+type UnsafeOrdersServiceServer interface {
+	mustEmbedUnimplementedOrdersServiceServer()
 }
 
-func RegisterQuoteRequestsServiceServer(s grpc.ServiceRegistrar, srv QuoteRequestsServiceServer) {
-	s.RegisterService(&QuoteRequestsService_ServiceDesc, srv)
+func RegisterOrdersServiceServer(s grpc.ServiceRegistrar, srv OrdersServiceServer) {
+	s.RegisterService(&OrdersService_ServiceDesc, srv)
 }
 
-func _QuoteRequestsService_RequestQuotes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _OrdersService_RequestQuotes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QuoteRequestsBody)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QuoteRequestsServiceServer).RequestQuotes(ctx, in)
+		return srv.(OrdersServiceServer).RequestQuotes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: QuoteRequestsService_RequestQuotes_FullMethodName,
+		FullMethod: OrdersService_RequestQuotes_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuoteRequestsServiceServer).RequestQuotes(ctx, req.(*QuoteRequestsBody))
+		return srv.(OrdersServiceServer).RequestQuotes(ctx, req.(*QuoteRequestsBody))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _QuoteRequestsService_GetQuotes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _OrdersService_GetQuotes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QuoteRequestsResponse)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QuoteRequestsServiceServer).GetQuotes(ctx, in)
+		return srv.(OrdersServiceServer).GetQuotes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: QuoteRequestsService_GetQuotes_FullMethodName,
+		FullMethod: OrdersService_GetQuotes_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QuoteRequestsServiceServer).GetQuotes(ctx, req.(*QuoteRequestsResponse))
+		return srv.(OrdersServiceServer).GetQuotes(ctx, req.(*QuoteRequestsResponse))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// QuoteRequestsService_ServiceDesc is the grpc.ServiceDesc for QuoteRequestsService service.
+// OrdersService_ServiceDesc is the grpc.ServiceDesc for OrdersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var QuoteRequestsService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.QuoteRequestsService",
-	HandlerType: (*QuoteRequestsServiceServer)(nil),
+var OrdersService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.OrdersService",
+	HandlerType: (*OrdersServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "RequestQuotes",
-			Handler:    _QuoteRequestsService_RequestQuotes_Handler,
+			Handler:    _OrdersService_RequestQuotes_Handler,
 		},
 		{
 			MethodName: "GetQuotes",
-			Handler:    _QuoteRequestsService_GetQuotes_Handler,
+			Handler:    _OrdersService_GetQuotes_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
