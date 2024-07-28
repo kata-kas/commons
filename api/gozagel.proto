@@ -12,6 +12,8 @@ service AuthService {
 service OrdersService {
     rpc RequestQuotes(QuoteRequestsBody) returns (QuoteRequestsResponse);
     rpc GetQuotes(QuoteRequestsResponse) returns (QuotesResponse);
+    rpc CreateShipment(ShipmentRequest) returns (Shipment);
+    rpc GetShipment(GetShipmentRequest) returns (Shipment);
 }
 
 message User {
@@ -68,6 +70,10 @@ message Shipment {
     repeated QuoteRequestsBody parcels = 5;
     string created_at = 6;
     ShipmentStatus status = 7;
+}
+
+message GetShipmentRequest {
+    string shipment_id = 1;
 }
 
 message PaymentRequest {

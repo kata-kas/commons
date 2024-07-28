@@ -148,8 +148,10 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	OrdersService_RequestQuotes_FullMethodName = "/api.OrdersService/RequestQuotes"
-	OrdersService_GetQuotes_FullMethodName     = "/api.OrdersService/GetQuotes"
+	OrdersService_RequestQuotes_FullMethodName  = "/api.OrdersService/RequestQuotes"
+	OrdersService_GetQuotes_FullMethodName      = "/api.OrdersService/GetQuotes"
+	OrdersService_CreateShipment_FullMethodName = "/api.OrdersService/CreateShipment"
+	OrdersService_GetShipment_FullMethodName    = "/api.OrdersService/GetShipment"
 )
 
 // OrdersServiceClient is the client API for OrdersService service.
@@ -158,6 +160,8 @@ const (
 type OrdersServiceClient interface {
 	RequestQuotes(ctx context.Context, in *QuoteRequestsBody, opts ...grpc.CallOption) (*QuoteRequestsResponse, error)
 	GetQuotes(ctx context.Context, in *QuoteRequestsResponse, opts ...grpc.CallOption) (*QuotesResponse, error)
+	CreateShipment(ctx context.Context, in *ShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
+	GetShipment(ctx context.Context, in *GetShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
 }
 
 type ordersServiceClient struct {
@@ -188,12 +192,34 @@ func (c *ordersServiceClient) GetQuotes(ctx context.Context, in *QuoteRequestsRe
 	return out, nil
 }
 
+func (c *ordersServiceClient) CreateShipment(ctx context.Context, in *ShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Shipment)
+	err := c.cc.Invoke(ctx, OrdersService_CreateShipment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ordersServiceClient) GetShipment(ctx context.Context, in *GetShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Shipment)
+	err := c.cc.Invoke(ctx, OrdersService_GetShipment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrdersServiceServer is the server API for OrdersService service.
 // All implementations must embed UnimplementedOrdersServiceServer
 // for forward compatibility
 type OrdersServiceServer interface {
 	RequestQuotes(context.Context, *QuoteRequestsBody) (*QuoteRequestsResponse, error)
 	GetQuotes(context.Context, *QuoteRequestsResponse) (*QuotesResponse, error)
+	CreateShipment(context.Context, *ShipmentRequest) (*Shipment, error)
+	GetShipment(context.Context, *GetShipmentRequest) (*Shipment, error)
 	mustEmbedUnimplementedOrdersServiceServer()
 }
 
@@ -206,6 +232,12 @@ func (UnimplementedOrdersServiceServer) RequestQuotes(context.Context, *QuoteReq
 }
 func (UnimplementedOrdersServiceServer) GetQuotes(context.Context, *QuoteRequestsResponse) (*QuotesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetQuotes not implemented")
+}
+func (UnimplementedOrdersServiceServer) CreateShipment(context.Context, *ShipmentRequest) (*Shipment, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateShipment not implemented")
+}
+func (UnimplementedOrdersServiceServer) GetShipment(context.Context, *GetShipmentRequest) (*Shipment, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetShipment not implemented")
 }
 func (UnimplementedOrdersServiceServer) mustEmbedUnimplementedOrdersServiceServer() {}
 
@@ -256,6 +288,42 @@ func _OrdersService_GetQuotes_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OrdersService_CreateShipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShipmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrdersServiceServer).CreateShipment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrdersService_CreateShipment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrdersServiceServer).CreateShipment(ctx, req.(*ShipmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OrdersService_GetShipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetShipmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrdersServiceServer).GetShipment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrdersService_GetShipment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrdersServiceServer).GetShipment(ctx, req.(*GetShipmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OrdersService_ServiceDesc is the grpc.ServiceDesc for OrdersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -270,6 +338,14 @@ var OrdersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetQuotes",
 			Handler:    _OrdersService_GetQuotes_Handler,
+		},
+		{
+			MethodName: "CreateShipment",
+			Handler:    _OrdersService_CreateShipment_Handler,
+		},
+		{
+			MethodName: "GetShipment",
+			Handler:    _OrdersService_GetShipment_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
