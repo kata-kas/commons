@@ -12,7 +12,7 @@ service AuthService {
 service OrdersService {
     rpc RequestQuotes(QuoteRequestsBody) returns (QuoteRequestsResponse);
     rpc GetQuotes(QuoteRequestsResponse) returns (QuotesResponse);
-    rpc CreateShipment(ShipmentRequest) returns (Shipment);
+    rpc CreateShipment(ShipmentRequestBody) returns (GetShipmentRequest);
     rpc GetShipment(GetShipmentRequest) returns (Shipment);
 }
 
@@ -54,7 +54,7 @@ message QuotesResponse {
     repeated Quote quotes = 1;
 }
 
-message ShipmentRequest {
+message ShipmentRequestBody {
     ShipmentActor recipient = 1;
     ShipmentActor shipper = 2;
     string selected_rate_id   = 11;

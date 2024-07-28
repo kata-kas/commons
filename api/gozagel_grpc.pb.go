@@ -160,7 +160,7 @@ const (
 type OrdersServiceClient interface {
 	RequestQuotes(ctx context.Context, in *QuoteRequestsBody, opts ...grpc.CallOption) (*QuoteRequestsResponse, error)
 	GetQuotes(ctx context.Context, in *QuoteRequestsResponse, opts ...grpc.CallOption) (*QuotesResponse, error)
-	CreateShipment(ctx context.Context, in *ShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
+	CreateShipment(ctx context.Context, in *ShipmentRequestBody, opts ...grpc.CallOption) (*GetShipmentRequest, error)
 	GetShipment(ctx context.Context, in *GetShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
 }
 
@@ -192,9 +192,9 @@ func (c *ordersServiceClient) GetQuotes(ctx context.Context, in *QuoteRequestsRe
 	return out, nil
 }
 
-func (c *ordersServiceClient) CreateShipment(ctx context.Context, in *ShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
+func (c *ordersServiceClient) CreateShipment(ctx context.Context, in *ShipmentRequestBody, opts ...grpc.CallOption) (*GetShipmentRequest, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Shipment)
+	out := new(GetShipmentRequest)
 	err := c.cc.Invoke(ctx, OrdersService_CreateShipment_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -218,7 +218,7 @@ func (c *ordersServiceClient) GetShipment(ctx context.Context, in *GetShipmentRe
 type OrdersServiceServer interface {
 	RequestQuotes(context.Context, *QuoteRequestsBody) (*QuoteRequestsResponse, error)
 	GetQuotes(context.Context, *QuoteRequestsResponse) (*QuotesResponse, error)
-	CreateShipment(context.Context, *ShipmentRequest) (*Shipment, error)
+	CreateShipment(context.Context, *ShipmentRequestBody) (*GetShipmentRequest, error)
 	GetShipment(context.Context, *GetShipmentRequest) (*Shipment, error)
 	mustEmbedUnimplementedOrdersServiceServer()
 }
@@ -233,7 +233,7 @@ func (UnimplementedOrdersServiceServer) RequestQuotes(context.Context, *QuoteReq
 func (UnimplementedOrdersServiceServer) GetQuotes(context.Context, *QuoteRequestsResponse) (*QuotesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetQuotes not implemented")
 }
-func (UnimplementedOrdersServiceServer) CreateShipment(context.Context, *ShipmentRequest) (*Shipment, error) {
+func (UnimplementedOrdersServiceServer) CreateShipment(context.Context, *ShipmentRequestBody) (*GetShipmentRequest, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateShipment not implemented")
 }
 func (UnimplementedOrdersServiceServer) GetShipment(context.Context, *GetShipmentRequest) (*Shipment, error) {
@@ -289,7 +289,7 @@ func _OrdersService_GetQuotes_Handler(srv interface{}, ctx context.Context, dec 
 }
 
 func _OrdersService_CreateShipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ShipmentRequest)
+	in := new(ShipmentRequestBody)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -301,7 +301,7 @@ func _OrdersService_CreateShipment_Handler(srv interface{}, ctx context.Context,
 		FullMethod: OrdersService_CreateShipment_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrdersServiceServer).CreateShipment(ctx, req.(*ShipmentRequest))
+		return srv.(OrdersServiceServer).CreateShipment(ctx, req.(*ShipmentRequestBody))
 	}
 	return interceptor(ctx, in, info, handler)
 }
