@@ -152,6 +152,7 @@ const (
 	OrdersService_GetQuotes_FullMethodName      = "/api.OrdersService/GetQuotes"
 	OrdersService_CreateShipment_FullMethodName = "/api.OrdersService/CreateShipment"
 	OrdersService_GetShipment_FullMethodName    = "/api.OrdersService/GetShipment"
+	OrdersService_GetPaymentLink_FullMethodName = "/api.OrdersService/GetPaymentLink"
 )
 
 // OrdersServiceClient is the client API for OrdersService service.
@@ -162,6 +163,7 @@ type OrdersServiceClient interface {
 	GetQuotes(ctx context.Context, in *QuoteRequestsResponse, opts ...grpc.CallOption) (*QuotesResponse, error)
 	CreateShipment(ctx context.Context, in *ShipmentRequestBody, opts ...grpc.CallOption) (*GetShipmentRequest, error)
 	GetShipment(ctx context.Context, in *GetShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
+	GetPaymentLink(ctx context.Context, in *GetPaymentLinkRequest, opts ...grpc.CallOption) (*PaymentLink, error)
 }
 
 type ordersServiceClient struct {
@@ -212,6 +214,16 @@ func (c *ordersServiceClient) GetShipment(ctx context.Context, in *GetShipmentRe
 	return out, nil
 }
 
+func (c *ordersServiceClient) GetPaymentLink(ctx context.Context, in *GetPaymentLinkRequest, opts ...grpc.CallOption) (*PaymentLink, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PaymentLink)
+	err := c.cc.Invoke(ctx, OrdersService_GetPaymentLink_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrdersServiceServer is the server API for OrdersService service.
 // All implementations must embed UnimplementedOrdersServiceServer
 // for forward compatibility
@@ -220,6 +232,7 @@ type OrdersServiceServer interface {
 	GetQuotes(context.Context, *QuoteRequestsResponse) (*QuotesResponse, error)
 	CreateShipment(context.Context, *ShipmentRequestBody) (*GetShipmentRequest, error)
 	GetShipment(context.Context, *GetShipmentRequest) (*Shipment, error)
+	GetPaymentLink(context.Context, *GetPaymentLinkRequest) (*PaymentLink, error)
 	mustEmbedUnimplementedOrdersServiceServer()
 }
 
@@ -238,6 +251,9 @@ func (UnimplementedOrdersServiceServer) CreateShipment(context.Context, *Shipmen
 }
 func (UnimplementedOrdersServiceServer) GetShipment(context.Context, *GetShipmentRequest) (*Shipment, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetShipment not implemented")
+}
+func (UnimplementedOrdersServiceServer) GetPaymentLink(context.Context, *GetPaymentLinkRequest) (*PaymentLink, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPaymentLink not implemented")
 }
 func (UnimplementedOrdersServiceServer) mustEmbedUnimplementedOrdersServiceServer() {}
 
@@ -324,6 +340,24 @@ func _OrdersService_GetShipment_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OrdersService_GetPaymentLink_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPaymentLinkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrdersServiceServer).GetPaymentLink(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrdersService_GetPaymentLink_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrdersServiceServer).GetPaymentLink(ctx, req.(*GetPaymentLinkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OrdersService_ServiceDesc is the grpc.ServiceDesc for OrdersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -346,6 +380,10 @@ var OrdersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetShipment",
 			Handler:    _OrdersService_GetShipment_Handler,
+		},
+		{
+			MethodName: "GetPaymentLink",
+			Handler:    _OrdersService_GetPaymentLink_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
