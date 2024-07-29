@@ -39,5 +39,10 @@ func Connect(user, pass, host, port string) (*amqp.Channel, func() error) {
 		log.Fatal(err)
 	}
 
+	err = ch.ExchangeDeclare(PaymentLinkCreatedEvent, "direct", true, false, false, false, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return ch, conn.Close
 }
