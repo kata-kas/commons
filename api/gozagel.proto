@@ -15,6 +15,7 @@ service OrdersService {
     rpc CreateShipment(ShipmentRequestBody) returns (GetShipmentRequest);
     rpc GetShipment(GetShipmentRequest) returns (Shipment);
     rpc GetPaymentLink(GetPaymentLinkRequest) returns (PaymentLink);
+    rpc SavePaymentLink(SavePaymentLinkRequest);
 }
 
 message User {
@@ -83,6 +84,11 @@ message GetPaymentLinkRequest {
 
 message PaymentLink {
     string payment_link = 1;
+}
+
+message SavePaymentLinkRequest {
+    string shipment_id = 1;
+    string payment_link = 2;
 }
 
 message PaymentRequest {
