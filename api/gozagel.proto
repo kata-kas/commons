@@ -1,0 +1,131 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/gozagel/commons/api";
+
+package api;
+
+service AuthService {
+    rpc Login(User) returns (AuthResponse);
+    rpc Register(User) returns (AuthResponse);
+}
+
+service OrdersService {
+    rpc RequestQuotes(QuoteRequestsBody) returns (QuoteRequestsResponse);
+    rpc GetQuotes(QuoteRequestsResponse) returns (QuotesResponse);
+    rpc CreateShipment(ShipmentRequestBody) returns (GetShipmentRequest);
+    rpc GetShipment(GetShipmentRequest) returns (Shipment);
+    rpc GetPaymentLink(GetPaymentLinkRequest) returns (PaymentLink);
+    rpc SavePaymentLink(SavePaymentLinkRequest) returns (google.protobuf.Empty);
+}
+
+message User {
+    string email = 1;
+    string password = 2;
+}
+
+message AuthResponse {
+    string token = 1;
+}
+
+message QuoteRequestsBody {
+    string from_country = 1;
+    string from_city = 2;
+    string to_country = 3;
+    string to_city = 4;
+    double length = 5;
+    double width = 6;
+    double height = 7;
+    double weight = 8;
+    bool residential = 13;
+}
+
+message Quote {
+    string id = 1;
+    string carrier = 2;
+    string carrier_id = 3;
+    string currency = 4;
+    float rate = 5;
+    int32 delay = 6;
+}
+
+message QuoteRequestsResponse {
+    string quoterequestsid = 1;
+}
+
+message QuotesResponse {
+    repeated Quote quotes = 1;
+}
+
+message ShipmentRequestBody {
+    ShipmentActor recipient = 1;
+    ShipmentActor shipper = 2;
+    string selected_rate_id   = 11;
+    string currency = 12;
+    int64 total_amount_cents = 13;
+}
+
+message Shipment {
+    string id = 1;
+    string tracking_url = 2;
+    ShipmentActor shipper = 3;
+    ShipmentActor recipient = 4;
+    repeated QuoteRequestsBody parcels = 5;
+    string created_at = 6;
+    ShipmentStatus status = 7;
+}
+
+message GetShipmentRequest {
+    string shipment_id = 1;
+}
+
+message GetPaymentLinkRequest {
+    string shipment_id = 1;
+}
+
+message PaymentLink {
+    string payment_link = 1;
+}
+
+message SavePaymentLinkRequest {
+    string shipment_id = 1;
+    string payment_link = 2;
+}
+
+message PaymentRequest {
+    string shipment_request_id = 1;
+    string customer_email = 2;
+    string currency = 3;
+    int64 total_amount_cents = 4;
+    string product_name = 5;
+}
+
+message ShipmentActor {
+    string postal_code = 1;
+    string city = 2;
+    string federal_tax_id = 3;
+    string state_tax_id = 4;
+    string person_name = 5;
+    string company_name = 6;
+    string country_code = 7;
+    string email = 8;
+    string phone_number = 9;
+    string state_code = 10;
+    bool residential = 11;
+    string street_number = 12;
+    string address_line1 = 13;
+    string address_line2 = 14;
+    bool validate_location = 15;
+}
+
+enum ShipmentStatus {
+    delivery_failed = 0;
+    draft = 1;
+    purchased = 2;
+    cancelled = 3;
+    shipped = 4;
+    in_transit = 5;
+    delivered = 6;
+    needs_attention = 7;
+    out_for_delivery = 8;
+}
