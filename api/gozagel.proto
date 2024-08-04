@@ -17,6 +17,7 @@ service OrdersService {
     rpc GetShipment(GetShipmentRequest) returns (Shipment);
     rpc GetPaymentLink(GetPaymentLinkRequest) returns (PaymentLink);
     rpc SavePaymentLink(SavePaymentLinkRequest) returns (google.protobuf.Empty);
+    rpc UpdateShipmentStatus(UpdateShipmentStatusBody) returns (google.protobuf.Empty);
 }
 
 message User {
@@ -90,6 +91,11 @@ message PaymentLink {
 message SavePaymentLinkRequest {
     string shipment_id = 1;
     string payment_link = 2;
+}
+
+message UpdateShipmentStatusBody {
+    string shipment_id = 1;
+    ShipmentStatus shipment_status = 2;
 }
 
 message PaymentRequest {
