@@ -120,6 +120,7 @@ message PaymentRequest {
     string currency = 3;
     int64 total_amount_cents = 4;
     string product_name = 5;
+    string selected_rate_id = 6;
 }
 
 message ShipmentActor {
