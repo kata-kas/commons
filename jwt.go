@@ -10,14 +10,16 @@ import (
 var jwtKey = []byte("your_secret_key")
 
 type Claims struct {
-	Email string `json:"email"`
+	Email  string `json:"email"`
+	UserID string `json:"user_id"`
 	jwt.StandardClaims
 }
 
-func GenerateJWT(email string) (string, error) {
+func GenerateJWT(userID, email string) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
-		Email: email,
+		Email:  email,
+		UserID: userID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -27,7 +29,7 @@ func GenerateJWT(email string) (string, error) {
 	return token.SignedString(jwtKey)
 }
 
-func ValidateJWT(tokenStr string) (string, error) {
+func ValidateJWT(tokenStr string) (string, string, error) {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
@@ -35,14 +37,14 @@ func ValidateJWT(tokenStr string) (string, error) {
 
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
-			return "", errors.New("invalid token signature")
+			return "", "", errors.New("invalid token signature")
 		}
-		return "", errors.New("invalid token")
+		return "", "", errors.New("invalid token")
 	}
 
 	if !token.Valid {
-		return "", errors.New("invalid token")
+		return "", "", errors.New("invalid token")
 	}
 
-	return claims.Email, nil
+	return claims.Email, claims.UserID, nil
 }
