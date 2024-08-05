@@ -18,6 +18,7 @@ service OrdersService {
     rpc GetPaymentLink(GetPaymentLinkRequest) returns (PaymentLink);
     rpc SavePaymentLink(SavePaymentLinkRequest) returns (google.protobuf.Empty);
     rpc UpdateShipmentStatus(UpdateShipmentStatusBody) returns (google.protobuf.Empty);
+    rpc BuyShipment(BuyShipmentRequest) returns (TrackingURL);
 }
 
 message User {
@@ -78,6 +79,18 @@ message Shipment {
 
 message GetShipmentRequest {
     string shipment_id = 1;
+}
+
+message BuyShipmentRequest {
+    ShipmentActor recipient = 1;
+    ShipmentActor shipper = 2;
+    repeated QuoteRequestsBody parcels = 3;
+    string selected_rate_id = 4;
+    repeated Quote quotes = 5;
+}
+
+message TrackingURL {
+    string tracking_url = 1;
 }
 
 message GetPaymentLinkRequest {
