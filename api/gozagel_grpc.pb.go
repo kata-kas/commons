@@ -157,6 +157,7 @@ const (
 	OrdersService_SavePaymentLink_FullMethodName      = "/api.OrdersService/SavePaymentLink"
 	OrdersService_UpdateShipmentStatus_FullMethodName = "/api.OrdersService/UpdateShipmentStatus"
 	OrdersService_BuyShipment_FullMethodName          = "/api.OrdersService/BuyShipment"
+	OrdersService_UpdateShipment_FullMethodName       = "/api.OrdersService/UpdateShipment"
 )
 
 // OrdersServiceClient is the client API for OrdersService service.
@@ -170,7 +171,8 @@ type OrdersServiceClient interface {
 	GetPaymentLink(ctx context.Context, in *GetPaymentLinkRequest, opts ...grpc.CallOption) (*PaymentLink, error)
 	SavePaymentLink(ctx context.Context, in *SavePaymentLinkRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateShipmentStatus(ctx context.Context, in *UpdateShipmentStatusBody, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	BuyShipment(ctx context.Context, in *BuyShipmentRequest, opts ...grpc.CallOption) (*TrackingURL, error)
+	BuyShipment(ctx context.Context, in *BuyShipmentRequest, opts ...grpc.CallOption) (*Shipment, error)
+	UpdateShipment(ctx context.Context, in *Shipment, opts ...grpc.CallOption) (*Shipment, error)
 }
 
 type ordersServiceClient struct {
@@ -251,10 +253,20 @@ func (c *ordersServiceClient) UpdateShipmentStatus(ctx context.Context, in *Upda
 	return out, nil
 }
 
-func (c *ordersServiceClient) BuyShipment(ctx context.Context, in *BuyShipmentRequest, opts ...grpc.CallOption) (*TrackingURL, error) {
+func (c *ordersServiceClient) BuyShipment(ctx context.Context, in *BuyShipmentRequest, opts ...grpc.CallOption) (*Shipment, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(TrackingURL)
+	out := new(Shipment)
 	err := c.cc.Invoke(ctx, OrdersService_BuyShipment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ordersServiceClient) UpdateShipment(ctx context.Context, in *Shipment, opts ...grpc.CallOption) (*Shipment, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Shipment)
+	err := c.cc.Invoke(ctx, OrdersService_UpdateShipment_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -272,7 +284,8 @@ type OrdersServiceServer interface {
 	GetPaymentLink(context.Context, *GetPaymentLinkRequest) (*PaymentLink, error)
 	SavePaymentLink(context.Context, *SavePaymentLinkRequest) (*emptypb.Empty, error)
 	UpdateShipmentStatus(context.Context, *UpdateShipmentStatusBody) (*emptypb.Empty, error)
-	BuyShipment(context.Context, *BuyShipmentRequest) (*TrackingURL, error)
+	BuyShipment(context.Context, *BuyShipmentRequest) (*Shipment, error)
+	UpdateShipment(context.Context, *Shipment) (*Shipment, error)
 	mustEmbedUnimplementedOrdersServiceServer()
 }
 
@@ -301,8 +314,11 @@ func (UnimplementedOrdersServiceServer) SavePaymentLink(context.Context, *SavePa
 func (UnimplementedOrdersServiceServer) UpdateShipmentStatus(context.Context, *UpdateShipmentStatusBody) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateShipmentStatus not implemented")
 }
-func (UnimplementedOrdersServiceServer) BuyShipment(context.Context, *BuyShipmentRequest) (*TrackingURL, error) {
+func (UnimplementedOrdersServiceServer) BuyShipment(context.Context, *BuyShipmentRequest) (*Shipment, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BuyShipment not implemented")
+}
+func (UnimplementedOrdersServiceServer) UpdateShipment(context.Context, *Shipment) (*Shipment, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateShipment not implemented")
 }
 func (UnimplementedOrdersServiceServer) mustEmbedUnimplementedOrdersServiceServer() {}
 
@@ -461,6 +477,24 @@ func _OrdersService_BuyShipment_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OrdersService_UpdateShipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Shipment)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrdersServiceServer).UpdateShipment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrdersService_UpdateShipment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrdersServiceServer).UpdateShipment(ctx, req.(*Shipment))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OrdersService_ServiceDesc is the grpc.ServiceDesc for OrdersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -499,6 +533,10 @@ var OrdersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "BuyShipment",
 			Handler:    _OrdersService_BuyShipment_Handler,
+		},
+		{
+			MethodName: "UpdateShipment",
+			Handler:    _OrdersService_UpdateShipment_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

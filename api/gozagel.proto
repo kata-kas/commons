@@ -18,7 +18,8 @@ service OrdersService {
     rpc GetPaymentLink(GetPaymentLinkRequest) returns (PaymentLink);
     rpc SavePaymentLink(SavePaymentLinkRequest) returns (google.protobuf.Empty);
     rpc UpdateShipmentStatus(UpdateShipmentStatusBody) returns (google.protobuf.Empty);
-    rpc BuyShipment(BuyShipmentRequest) returns (TrackingURL);
+    rpc BuyShipment(BuyShipmentRequest) returns (Shipment);
+    rpc UpdateShipment(Shipment) returns (Shipment);
 }
 
 message User {
@@ -75,6 +76,8 @@ message Shipment {
     repeated QuoteRequestsBody parcels = 5;
     string created_at = 6;
     ShipmentStatus status = 7;
+    string label = 8;
+    string invoice = 9;
 }
 
 message GetShipmentRequest {
