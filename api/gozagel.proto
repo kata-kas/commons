@@ -78,6 +78,7 @@ message Shipment {
     ShipmentStatus status = 7;
     string label = 8;
     string invoice = 9;
+    string selected_rate_id = 10;
 }
 
 message GetShipmentRequest {
