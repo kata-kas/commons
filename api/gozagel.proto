@@ -93,7 +93,7 @@ message BuyShipmentRequest {
     ShipmentActor shipper = 2;
     repeated QuoteRequestsBody parcels = 3;
     string selected_rate_id = 4;
-    repeated Quote quotes = 5;
+    repeated Quote rates = 5;
 }
 
 message TrackingURL {
