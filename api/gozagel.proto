@@ -40,7 +40,8 @@ message QuoteRequestsBody {
     double width = 6;
     double height = 7;
     double weight = 8;
-    bool residential = 13;
+    string weight_unit = 9;
+    bool residential = 10;
 }
 
 message Quote {
