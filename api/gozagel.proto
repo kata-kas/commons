@@ -66,6 +66,7 @@ message ShipmentRequestBody {
     string selected_rate_id   = 11;
     string currency = 12;
     int64 total_amount_cents = 13;
+    string quote_request_id = 3;
 }
 
 message Shipment {
