@@ -52,6 +52,7 @@ message Quote {
     string currency = 4;
     float rate = 5;
     int32 delay = 6;
+    bool test_mode = 7;
 }
 
 message QuoteRequestsResponse {
