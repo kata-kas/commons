@@ -43,6 +43,7 @@ message QuoteRequestsBody {
     string weight_unit = 9;
     string dimension_unit = 10;
     bool residential = 11;
+    string is_document = 12;
 }
 
 message Quote {
